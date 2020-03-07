@@ -1,0 +1,147 @@
+
+:imagesdir: ./assets/img/
+
+= Header 1[[header-1]]
+
+== Header 2
+
+=== 1.Ordered List
+
+. Element 1
+. Element 2
+
+=== 2.Unordered List
+
+* Element 1
+* Element 2
+
+=== 3.Admonitions
+
+TIP: Pro tip...
+
+IMPORTANT: Don't forget...
+
+WARNING: Watch out for...
+
+CAUTION: Ensure that...
+
+=== 4.Link (extenal, with spaces and special characters, relative, Link with attributes, Inline anchors, Internal cross references)
+
+https://asciidoctor.org - automatic!
+
+https://asciidoctor.org[Asciidoctor]
+
+link:++https://example.org/?q=[a b]++[URL with special characters]
+
+link:https://example.org/?q=%5Ba%20b%5D[URL with special characters]
+
+link:index.html[Docs]
+
+https://discuss.asciidoctor.org[Discuss Asciidoctor,role=external,window=_blank]
+
+https://discuss.asciidoctor.org[Discuss Asciidoctor^]
+
+https://example.org["Google, Yahoo, Bing^",role=teal]
+
+[[bookmark-a]]Inline anchors make arbitrary content referenceable.
+
+[#bookmark-b]#Inline anchors can be applied to a phrase like this one.#
+
+anchor:bookmark-c[]Use a cross reference to link to this location.
+
+[[bookmark-d,last paragraph]]The xreflabel attribute will be used as link text in the cross-reference link.
+
+See <<paragraphs>> to learn how to write paragraphs.
+
+Learn how to organize the document into <<section-titles,sections>>.
+
+=== 5.Images
+
+image::sunset.jpg[]
+
+image::sunset.jpg[Sunset]
+
+.A mountain sunset
+[#img-sunset]
+[caption="Figure 1: ",link=https://www.flickr.com/photos/javh/5448336655]
+image::sunset.jpg[Sunset,300,200]
+
+image::https://asciidoctor.org/images/octocat.jpg[GitHub mascot]
+
+=== 6.Videos
+
+video::./assets/video/small.mp4[]
+
+video::./assets/video/small.mp4[width=640, start=60, end=140, options=autoplay]
+
+video::rPQoq7ThGAU[youtube]
+
+video::67480300[vimeo]
+
+=== 7.Inline Code, Code block with title and syntax highlighting
+
+ Reference code like `types` or `methods` inline.
+ Do not pass arbitrary ``Object``s to methods that accept ``String``s!
+
+ Output literal monospace text such as {backtick} by enclosing the text in pluses, then in backticks.
+
+.app.rb
+[source,ruby]
+----
+require 'sinatra'
+
+get '/hi' do
+  "Hello World!"
+end
+----
+==== 7.1.Linux bash script code
+
+```sh
+# print the contents of foo.txt to STDOUT
+$ cat foo.txt
+```
+
+=== 8.Table
+
+.Table Title
+|===
+|Name of Column 1 |Name of Column 2 |Name of Column 3 
+
+|Cell in column 1, row 1
+|Cell in column 2, row 1
+|Cell in column 3, row 1
+
+|Cell in column 1, row 2
+|Cell in column 2, row 2
+|Cell in column 3, row 2
+|===
+
+<<header-1,Go to HEADER 1>>
+
+=== PlantUML
+
+[plantuml, diagram-classes, png]     
+....
+class Animal {
+string data
+int data2
+
+void method1()
+int method2(string)
+}
+class Dog{
+string special_data
+
+void method1()
+int method2(string)
+}
+class Cat{
+string special_data
+
+void method1()
+void method3()
+}
+
+Animal <|-- Dog
+Animal <|-- Cat
+....

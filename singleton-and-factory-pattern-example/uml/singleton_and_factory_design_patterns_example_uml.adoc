@@ -1,0 +1,75 @@
+[plantuml, diagram-classes, png]     
+....
+class Singleton{
+    -Container instance
+    
+    +Container getInstance()
+    +void setInstance(int height, int width)
+}
+class Container{
+    +int width
+    +int height
+    
+    +void setWidth(int width)
+    +void setHeight(int height)
+}
+
+
+class ShapeFactory{
+    +getShape(string shape_type)
+}
+
+
+package ShapeInterface {
+    class Shape{
+        +int x
+        +int y
+        +string color
+    }
+
+    class Circle{
+        +int radius
+    
+        +Circle getShape()
+        +void setShape(x, y, radius, color='white')
+        +void draw()
+    }
+
+    class Rectangle{
+        +int width
+        +int height
+    
+        +Rectangle getShape()
+        +void setShape(x, y, width, height, color='white')
+        +void draw()
+    }
+
+    class Triangle{
+        +int radius
+    
+        +Triangle getShape()
+        +void setShape(x, y, radius, color='white')
+        +void draw()
+    }
+
+    class Star{
+        +int innerRadius
+        +int outerRadius
+        +int numPoints
+        
+        +Star getShape()
+        +void setShape(x, y, innerRadius, outerRadius, numPoints=5, color='white')
+        +void draw()
+    }
+}
+
+Singleton "1" o-- "0..n" Container
+Shape <|-- Circle
+Shape <|-- Rectangle
+Shape <|-- Triangle
+Shape <|-- Star
+ShapeFactory  ..> ShapeInterface : << creates >>
+Container <.. ShapeInterface : << bind >>
+
+
+....

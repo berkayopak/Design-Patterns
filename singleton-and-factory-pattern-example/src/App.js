@@ -10,17 +10,13 @@ class App extends React.Component{
   constructor(props) {
     super(props);
 
-    let singleton = new Singleton();
     const height = 700, width = 800;
-    singleton.setInstance(height,width);
+    Singleton.setInstance(height,width);
 
-    this.state = {singleton: singleton, width: width, height: height};
+    this.state = {singleton: Singleton, width: width, height: height};
 
     this.onChange = this.onChange.bind(this);
     this.setContainer = this.setContainer.bind(this);
-
-    let other_singleton = new Singleton();
-    console.log(other_singleton.getInstance());
   }
 
   componentDidMount() {

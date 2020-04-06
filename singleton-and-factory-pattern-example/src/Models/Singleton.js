@@ -17,7 +17,9 @@ class Singleton {
         Singleton.instance.setHeight(height);
         Singleton.instance.setWidth(width);
     }
-
 }
 
-export default Singleton;
+const singleton_instance = new Singleton();
+Object.freeze(singleton_instance);
+
+export default singleton_instance;

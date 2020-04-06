@@ -1,0 +1,86 @@
+
+
+### Açıklamalar
+
+#### Çalıştırma
+[source,console]
+----
+npm install
+yarn start
+----
+** Projeyi çalıştırmak için proje klasörü içerisinde yukarıdaki kodları console/terminal üzerinde çalıştırmanız gerekmektedir. 
+
+CAUTION: Bilgisayarınızda npm ve yarn paketlerinin yüklü olduğundan emin olun.
+
+##### './src/Models/Singleton.js'
+
+[source,javascript]
+----
+class Singleton {
+    constructor() {
+        if (!Singleton.instance) {
+            console.log("new");
+            Singleton.instance = new Container(); // <1>
+        }
+    }
+    getInstance() {
+        return Singleton.instance;  // <2>
+    }
+
+    setInstance(height, width){ // <3>
+        Singleton.instance.setHeight(height);
+        Singleton.instance.setWidth(width);
+    }
+}
+const singleton_instance = new Singleton(); // <4>
+Object.freeze(singleton_instance); // <5>
+
+export default singleton_instance; // <6>
+----
+
+<1> Singleton sınıfının instance elemanına Container sınıfından bir obje atanıyor.
+<2> Singleton sınıfının instance elemanının get fonksiyonu
+<3> Singleton sınıfının instance elemanının set fonksiyonu
+<4> Singleton sınıfından bir obje oluşturuluyor.
+<5> Singleton sınıfından oluşturulan 'singleton_instance' değişkeninin thread-safe olması için Object.freeze(...) fonksiyonu ile değiştirilemez, türetilemez hale getiriliyor.
+
+##### './src/Models/ShapeFactory.js'
+
+[source,javascript]
+----
+import Circle from "./Circle";
+import Rectangle from "./Rectangle";
+import Triangle from "./Triangle";
+import Star from "./Star";
+
+
+class ShapeFactory {
+
+    constructor() {
+
+    }
+
+    getShape(shape_type){ // <1>
+        if(shape_type=="circle"){
+            return new Circle();
+        }
+        else if(shape_type=="rectangle"){
+            return new Rectangle();
+        }
+        else if(shape_type=="triangle"){
+            return new Triangle();
+        }
+        else if(shape_type=="star"){
+            return new Star();
+        }
+        else{
+            return null;
+        }
+    }
+
+}
+
+export default ShapeFactory;
+----
+
+<1> ShapeFactory sınıfının getShape fonksiyonu; aldığı shape_type(string) parametresi üzerinden istenilen sınıf türündeki objeyi geri döndürür.

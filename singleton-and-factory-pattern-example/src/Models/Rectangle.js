@@ -9,7 +9,7 @@ class Rectangle extends Shape{
     constructor() {
         super();
     }
-    getCircle(){
+    getShape(){
         return this;
     }
     setShape(x, y, width, height, color='white'){

@@ -7,7 +7,7 @@ class Triangle extends Shape{
     constructor() {
         super();
     }
-    getCircle(){
+    getShape(){
         return this;
     }
     setShape(x, y, radius, color='white'){

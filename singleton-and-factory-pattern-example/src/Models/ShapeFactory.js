@@ -20,8 +20,11 @@ class ShapeFactory {
         else if(shape_type=="triangle"){
             return new Triangle();
         }
-        else if(shape_type="star"){
+        else if(shape_type=="star"){
             return new Star();
+        }
+        else{
+            return null;
         }
     }
 

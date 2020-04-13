@@ -1,5 +1,15 @@
 import Swal from 'sweetalert2'
 
+function showError(msg) {
+    Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: msg,
+        showConfirmButton: false,
+        timer: 1500
+    })
+}
+
 class ObjectPool {
     constructor(size, object){
         this.pool = []
@@ -24,21 +34,22 @@ class ObjectPool {
         }
         else {
             console.log("Pool is empty!");
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Pool is empty!',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            showError("Pool is empty!");
         }
     }
 
     recycle(oRecyclable){
         if (!oRecyclable instanceof this.object) {
-            throw new Error("Trying to recycle the wrong object for pool.");
+            console.log("Trying to recycle the wrong object for pool!");
+            showError("Trying to recycle the wrong object for pool!");
+
         }
-        console.log(oRecyclable);
+        if(!oRecyclable){
+            console.log("Recycle object is undefined/null!");
+            showError("Object is undefined/null!");
+
+            return;
+        }
         if((this.size - this.active) < this.size && !oRecyclable.oRecycled){
             oRecyclable.recycle();
             this.pool.push(oRecyclable);
@@ -46,23 +57,12 @@ class ObjectPool {
         }
         else if ((this.size - this.active) >= this.size){
             console.log("Pool is full!");
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Pool is full!',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            showError("Pool is full!");
+
         }
         else {
             console.log("This object already recycled!");
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'This object already recycled!',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            showError("This object already recycled!");
         }
     }
 

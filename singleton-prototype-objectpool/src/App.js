@@ -129,6 +129,13 @@ class App extends React.Component {
                     active_objects: _active_objects
                 });
             });
+            this.recycle(_active_objects.pop()).then(res => {
+                console.log("Recycled");
+                this.setState({
+                    pool_objects: SingletonObjectPool.getInstance(),
+                    active_objects: _active_objects
+                });
+            });
         }
         else {
             console.log("There is no active objects!");

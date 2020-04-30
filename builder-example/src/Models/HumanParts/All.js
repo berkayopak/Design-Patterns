@@ -1,0 +1,5 @@
+export {default as Arm} from './Arm'
+export {default as Body} from './Body'
+export {default as Head} from './Head'
+export {default as Leg} from './Leg'
+export {default as Neck} from './Neck'

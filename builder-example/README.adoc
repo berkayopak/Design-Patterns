@@ -1,0 +1,90 @@
+
+
+### Açıklamalar
+
+#### Çalıştırma
+[source,console]
+----
+npm install
+yarn start
+----
+** Projeyi çalıştırmak için proje klasörü içerisinde yukarıdaki kodları console/terminal üzerinde çalıştırmanız gerekmektedir. 
+
+CAUTION: Bilgisayarınızda npm ve yarn paketlerinin yüklü olduğundan emin olun.
+
+##### './src/Models/Human.js'
+
+[source,javascript]
+----
+class Human{
+    constructor(Arm1, Arm2, Body, Head, Leg1, Leg2, Neck) { // <1>
+        this.Arm1 = Arm1;
+        this.Arm2 = Arm2;
+        this.Body = Body;
+        this.Head = Head;
+        this.Leg1 = Leg1;
+        this.Leg2 = Leg2;
+        this.Neck = Neck;
+    }
+
+    draw() {  // <2>
+        return [
+            this.Neck.draw(),
+            this.Head.draw(),
+            this.Body.draw(),
+            this.Arm1.draw(),
+            this.Arm2.draw(),
+            this.Leg1.draw(),
+            this.Leg2.draw()
+        ];
+    }
+
+}
+----
+
+<1> Human nesnemizin constructor alanı, parçalar nesne içerisine gönderiliyor.
+<2> Ekranda human nesnesi çizdirmek için, parçaları teker teker çizdirip anlamlı bir bütün oluşturmaya çalışan fonksiyon.
+
+##### './src/Builders/HumanBuilder.js'
+
+[source,javascript]
+----
+let HumanBuilder = function () {
+    return { // <1>
+        setArm1: function (Arm1) {
+            this.Arm1 = Arm1;
+            return this;
+        },
+        setArm2: function (Arm2) {
+            this.Arm2 = Arm2;
+            return this;
+        },
+        setBody: function (Body) {
+            this.Body = Body;
+            return this;
+        },
+        setHead: function (Head) {
+            this.Head = Head;
+            return this;
+        },
+        setLeg1: function (Leg1) {
+            this.Leg1 = Leg1;
+            return this;
+        },
+        setLeg2: function (Leg2) {
+            this.Leg2 = Leg2;
+            return this;
+        },
+        setNeck: function (Neck) {
+            this.Neck = Neck;
+            return this;
+        },
+        build: function () { // <2>
+            return new Human(this.Arm1, this.Arm2, this.Body, this.Head, this.Leg1, this.Leg2, this.Neck);
+        }
+    };
+};
+----
+
+<1> Builder fonksiyonlarını döndürüyor.
+<2> Builder üzerinde parçalar set edildikten sonra geriye ayarlanan parçaları içinde bulunduran kompleks bir obje döndürülüyor.

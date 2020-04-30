@@ -1,0 +1,100 @@
+[plantuml, diagram-classes, png]     
+....
+class Human {
+-Head head
+-Neck neck
+-Body body
+-Arm arm1
+-Arm arm2
+-Leg leg1
+-Leg leg2
+
++HtmlContent draw()
+}
+
+abstract Shape{
++ int x
++ iny y
++ string color
++ int angle
+
++ {static} Shape getShape()
++ {static} void setShape(...)
++ {static} HtmlContent draw()
+}
+
+class Arm{
++ int width
++ int height
+
++Arm getShape()
++void setShape(x, y, width, height, color='white', angle=0)
++HtmlContent draw()
+}
+class Body{
++ int width
++ int height
+
++Body getShape()
++void setShape(x, y, width, height, color='white')
++HtmlContent draw()
+}
+class Head{
++int radius
+
++Head getShape()
++void setShape(x, y, radius, color='white')
++HtmlContent draw()
+}
+class Leg{
++ int width
++ int height
+
++Leg getShape()
++void setShape(x, y, width, height, color='white', angle=0)
++HtmlContent draw()
+}
+class Neck{
++ int width
++ int height
+
++Neck getShape()
++void setShape(x, y, width, height, color='white')
++HtmlContent draw()
+}
+
+class HumanBuilder{
+-Head head
+-Neck neck
+-Body body
+-Arm arm1
+-Arm arm2
+-Leg leg1
+-Leg leg2
+
++void setHead(Head head)
++void setNeck(Neck neck)
++void setBody(Body body)
++void setArm1(Arm arm1)
++void setArm2(Arm arm2)
++void setLeg1(Leg leg1)
++void setLeg2(Leg leg2)
++Human build(arm1, arm2, body, head, leg1, leg2, neck)
+}
+
+Shape <|.. Arm
+Shape <|.. Body
+Shape <|.. Head
+Shape <|.. Leg
+Shape <|.. Neck
+
+Arm --* Human : 2
+Body --* Human : 1
+Head --* Human : 1
+Leg --* Human : 2
+Neck --* Human : 1
+
+HumanBuilder --> Human : creates
+
+
+....

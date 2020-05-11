@@ -1,0 +1,193 @@
+
+
+# Açıklamalar
+
+## Çalıştırma
+[source,console]
+----
+npm install
+yarn start
+----
+** Projeyi çalıştırmak için proje klasörü içerisinde yukarıdaki kodları console/terminal üzerinde çalıştırmanız gerekmektedir. 
+
+CAUTION: Bilgisayarınızda npm ve yarn paketlerinin yüklü olduğundan emin olun.
+
+## Iterator Pattern
+
+##### './src/Models/Iterator.js'
+
+[source,javascript]
+----
+class Iterator {
+    constructor() {
+        if (new.target === Iterator) { //<1>
+            throw new TypeError("Cannot construct Abstract instances directly");
+        }
+        if (this.next === undefined) { //<2>
+            throw new TypeError("Must override method next");
+        }
+        if (this.hasNext === undefined) { //<2>
+            throw new TypeError("Must override method hasNext");
+        }
+        if (this.reset === undefined) { //<2>
+            throw new TypeError("Must override method rewind");
+        }
+    }
+}
+----
+
+<1> Iterator sınıfından obje yaratılamaması için böyle bir kontrol yazdım.
+<2> Iterator sınıfının interface gibi davranmasını istediğimizden, override edilmesi gereken fonksiyonlar belirledim.
+
+##### './src/Models/Collection.js'
+
+[source,javascript]
+----
+class Collection {
+    constructor() {
+        if (new.target === Collection) {// <1>
+            throw new TypeError("Cannot construct Abstract instances directly");
+        }
+        if (this.createIterator === undefined) {// <2>
+            throw new TypeError("Must override method createIterator");
+        }
+    }
+}
+----
+
+<1> Collection sınıfından obje yaratılamaması için böyle bir kontrol yazdım.
+<2> Collection sınıfının interface gibi davranmasını istediğimizden, override edilmesi gereken fonksiyonlar belirledim.
+
+
+##### './src/Models/ProductIterator.js'
+
+[source,javascript]
+----
+class ProductIterator extends Iterator{
+    constructor(productList){ // <1>
+        super();
+        this._index = 0;
+        this._productList = productList;
+    }
+
+    next(){ // <2>
+        let product = this._productList[this._index];
+        this._index++;
+        return product;
+    }
+
+    hasNext() { // <3>
+        return !(this._index >= this._productList.length);
+    }
+
+    reset(){ // <4>
+        this._index = 0;
+    }
+}
+----
+
+<1> Constructor içerisinde private variable tanımlamaları yapıldı ve super(parent class constructor) çağrıldı.
+<2> Şuanki index e sahip product nesnesi çekiliyor, index arttırılıyor, product nesnesi geri döndürülüyor.
+<3> Şuanki index, product listesinin boyutuna eşit ya da büyükse; listenin ilerisinde başka bir product olmaadığı anlaşılıyor.
+<4> Index değişkeni tekrardan sıfıra eşitleniyor, bir nevi iterator resetleniyor.
+
+##### './src/Models/ProductCollection.js'
+
+[source,javascript]
+----
+class ProductCollection extends Collection{
+    constructor(){
+        super();
+        this.productList = new Array();
+    }
+
+    addProduct(id, price=0, title="", category="", brand="", num_of_purchases=0){ // <1>
+        let product = new Product(id, price, title, category, brand, num_of_purchases);
+        this.productList.push(product);
+    }
+
+    createIterator(){ // <2>
+        return new ProductIterator(this.productList);
+    }
+
+}
+----
+
+<1> ProductCollection objesi içerisindeki productList array değişkenine yeni bir product eklenmesi işlemi yapılıyor.
+<2> ProductCollection objesinin içerisindeki productList array değişkenini iterate edebilecek bir iterator oluşturuluyor.
+
+## Observer Pattern
+
+##### './src/Models/Observer.js'
+
+[source,javascript]
+----
+class Observer{
+    constructor(){
+        this._product = null; // <1>
+        if (new.target === Observer) { // <2>
+            throw new TypeError("Cannot construct Abstract instances directly");
+        }
+        if (this.update === undefined) { // <3>
+            throw new TypeError("Must override method update");
+        }
+    }
+}
+----
+
+<1> Observe edilecek product objesi için yaratılmış boş değişken.
+<2> Observer sınıfından obje yaratılamaması için böyle bir kontrol yazdım.
+<3> Observer sınıfının abstract class gibi davranmasını istediğimizden, override edilmesi gereken fonksiyonlar belirledim.
+
+##### './src/Models/Product.js'
+
+[source,javascript]
+----
+class Product{
+    constructor(id, price=0, title="", category="", brand="", num_of_purchases=0){
+        this._id = id;
+        this._price = price;
+        this._title = title;
+        this._category = category;
+        this._brand = brand;
+        this._num_of_purchases = num_of_purchases;
+        this._observers = new Array();
+    }
+
+    attach(observer){ // <1>
+        this._observers.push(observer);
+    }
+
+    notifyAllObservers(){ // <2>
+        this._observers.map(function (observer, key) {
+            observer.update();
+        })
+    }
+
+    ...
+}
+----
+
+<1> Product objesinin observer listesine eklenme işlemi yapılmaktadır.
+<2> Product objesinin içerisindeki observer listesindeki bütün observer objelerinin update fonksiyonu çağrılmaktakdır.
+
+##### './src/Models/DiscountObserver.js'
+
+[source,javascript]
+----
+class DiscountObserver extends Observer{
+    constructor(product){
+        super();
+        this._product = product;
+        this._product.attach(this); // <1>
+    }
+
+    update(){ // <2>
+        console.log("Price changed : " + this._product.price);
+        showNotification("Product("+ this._product.title +") price changed : " + this._product.price);
+    }
+}
+----
+
+<1> DiscountObserver objesinin içerisindeki product objesinin attach fonksiyonu çağrılarak, product objesi içerisindeki observer listesine DiscountObserver nesnesi eklenir.
+<2> Product içerisinden bağlı observerların update fonksiyonu çağrıldığında çalışacak olan kısım.

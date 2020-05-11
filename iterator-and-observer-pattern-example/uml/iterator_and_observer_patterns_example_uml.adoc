@@ -1,0 +1,66 @@
+[plantuml, diagram-classes, png]     
+....
+class Product {
+-int _id
+-int _price
+-string _title
+-string _category
+-string _brand
+-int _num_of_purchases
+-Array<Observer> _observers
+
++void attach(Observer observer)
++void notifyAllObservers()
+}
+
+abstract Collection{
+
++{static} Iterator createIterator()
+}
+
+class ProductCollection{
+-Array<Product> productList
+
++void addProduct(...)
++ProductIterator createIterator()
+}
+
+abstract Iterator{
+
++{static} <T> next()
++{static} boolean hasNext()
++{static} void reset()
+}
+
+class ProductIterator{
+-int _index
+-Array<product> productList
+
++Product next()
++boolean hasNext()
++void reset()
+}
+
+abstract Observer{
+#Product _product
+
++{static} void update()
+}
+
+class DiscountObserver{
+-Product _product
+
++void update()
+}
+
+Iterator <|.. ProductIterator
+Collection <|.. ProductCollection
+Observer <|.. DiscountObserver
+
+ProductCollection ..> ProductIterator : <<create>>
+ProductCollection ..> Product: <<create>>
+ProductIterator ..> Product: <<use>>
+
+DiscountObserver ..> Product: <<attach>>
+Product ..> DiscountObserver: <<update>>
+....

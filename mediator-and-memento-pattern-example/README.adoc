@@ -11,3 +11,229 @@ yarn start
 ** Projeyi çalıştırmak için proje klasörü içerisinde yukarıdaki kodları console/terminal üzerinde çalıştırmanız gerekmektedir. 
 
 CAUTION: Bilgisayarınızda npm ve yarn paketlerinin yüklü olduğundan emin olun.
+
+
+## Memento Pattern
+
+##### './src/Models/Caretaker.js'
+
+[source,javascript]
+----
+class Caretaker {
+    constructor() { // <1>
+        this.values = [];
+    }
+
+    getSize(){ // <2>
+        return this.values.length;
+    }
+
+    addObject(object) { // <3>
+        this.values.push(object);
+    }
+
+    getObject(index) { // <4>
+        return this.values[index];
+    }
+
+    popLatestObject() { // <5>
+        return this.values.pop()
+    }
+}
+----
+
+<1> Constructor içerisinde state tutulacak array değişkenini(values) oluşturuyoruz.
+<2> Dizinin boyutunu almak için kullanılan fonksiyon.
+<3> State dizisine obje eklemek için kullanılan fonskiyon.
+<4> State dizisi içerisindeki istenilen index değerine sahip state verisini döndürmek için kullanılan fonksiyon.
+<5> State dizisindeki son state/objeyi çekmek için kullanılan fonksiyon.
+
+##### './src/App.js'
+
+[source,javascript]
+----
+class App extends React.Component{
+
+    saveProduct(){
+        const curProduct = this.state.currentProduct;
+        this.state.productCareTaker.addObject(curProduct); // <1>
+        const updatedProduct = new Product(curProduct.id, curProduct.price, this.state.product_title, curProduct.category, curProduct.brand, curProduct.num_of_purchases);
+        this.setState({currentProduct : updatedProduct});
+    }
+
+    undoProduct(){
+        if(this.state.productCareTaker.getSize() > 0){ // <2>
+            this.setState({currentProduct : this.state.productCareTaker.popLatestObject()}, () => this.refreshDisplay()); // <3>
+        }
+    }
+}
+----
+
+<1> Şuanki(eski) product objesi productCareTaker içerisine ekleniyor.
+<2> Dizi içerisinde eleman var mı ona bakıyoruz, eleman yoksa undo yapılacak bir durum yok demektir.
+<3> Diziye(productCareTaker.values) en son  aldığımız product objesini diziden çıkarıp güncel product objesine atıyoruz.
+
+## Mediator Pattern
+
+##### './src/Models/Mediator.js'
+
+[source,javascript]
+----
+class Mediator {
+    constructor() {
+        if (new.target === Mediator) { // <1>
+            throw new TypeError("Cannot construct Abstract instances directly");
+        }
+        if (this.notify === undefined) { // <2>
+            throw new TypeError("Must override method notify");
+        }
+    }
+}
+----
+
+<1> Mediator sınıfından obje yaratılamaması için böyle bir kontrol yazdım.
+<2> Mediator sınıfının interface gibi davranmasını istediğimizden, override edilmesi gereken fonksiyonlar belirledim.
+
+
+##### './src/Models/Emergency/EmergencyMediator.js'
+
+[source,javascript]
+----
+class EmergencyMediator extends Mediator{
+    register(participant) { // <1>
+        switch (participant.type) {
+            case "Citizen":
+                this._citizen=participant;
+                this._citizen.emergencyMediator=this;
+                break;
+            case "Police":
+                this._police=participant;
+                this._police.emergencyMediator=this;
+                break;
+            case "Fire":
+                this._fire=participant;
+                this._fire.emergencyMediator=this;
+                break;
+            case "Rescue":
+                this._rescue=participant;
+                this._rescue.emergencyMediator=this;
+                break;
+            default:break;
+        }
+    }
+
+    notify(sender, event, message){ // <2>
+        switch (sender) {
+            case "Citizen":
+                switch (event) {
+                    case "Fire":
+                        this._fire.sendFireTruck(message);
+                        break;
+                    case "Criminal":
+                        this._police.sendOfficer(message);
+                        break;
+                    case "HealthIssue":
+                        this._rescue.sendAmbulance(message);
+                        break;
+                }
+                break;
+            case "Fire":
+                ...
+                break;
+            case "Police":
+                ...
+                break;
+            case "Rescue":
+                ...
+                break;
+            default: console.log("Undefined sender!");
+        }
+    }
+}
+----
+
+<1> Objelerin gelip EmergencyMediator objesine register olması için kullanılan fonksiyon.
+<2> Herhangi bir kayıtlı obje; ilgili emergencyMediator objesini notify ettikten sonra, duruma göre alınacak action belirlenir ve gerekli işlemler yapılır.
+
+
+##### './src/Models/Mediator.js'
+
+[source,javascript]
+----
+class Police {
+    get emergencyMediator() {
+        return this._emergencyMediator;
+    }
+
+    set emergencyMediator(value) {
+        this._emergencyMediator = value;
+    }
+    get type() {
+        return this._type;
+    }
+    constructor(){
+        this._type = "Police";
+        this._emergencyMediator = null;
+    }
+
+    sendBackup(message=""){ // <1>
+        showNotification("Police Department", "Reinforcement sent!", message);
+    }
+
+    sendOfficer(message=""){
+        showNotification("Police Department", "Officer sent!", message);
+    }
+
+    sendInvestigator(message=""){
+        showNotification("Police Department", "Investigator sent!", message);
+    }
+
+    callEmergencyLine(event, message){ // <2>
+        this._emergencyMediator.notify(this._type, event, message);
+    }
+}
+----
+
+<1> EmergencyMediator objesinde alınan karara göre çalışma potansiyeli olan bir fonksiyon(action).
+<2> İlgili objenin(Citizen, Fire, Police, Rescue vs.) emergencyMediator objesine notify yollamak için kullandığı fonksiyon.
+
+
+##### './src/App.js'
+
+[source,javascript]
+----
+class App extends React.Component{
+constructor(props) {
+    ...
+    this.state = {
+      ...,
+      citizen: new Citizen(),
+      police: new Police(),
+      fire: new Fire(),
+      rescue: new Rescue(),
+      ...
+    };
+
+    const emergencyMediator = new EmergencyMediator();
+
+    emergencyMediator.register(this.state.citizen); // <1>
+    emergencyMediator.register(this.state.police); // <1>
+    emergencyMediator.register(this.state.fire); // <1>
+    emergencyMediator.register(this.state.rescue); // <1>
+  }
+
+  render(){
+    return(
+        ...
+        <input type="button" value="Call Emergency Center"
+        onClick={() => {
+            this.state.rescue.callEmergencyLine(this.state.rescue_event, this.state.rescue_message); // <2>
+        }}/>
+        ...
+    )
+  }
+}
+----
+
+<1> Objelerin emergencyMediator objesine kayıt edildiği yer.
+<2> İlgili objenin(Citizen, Fire, Police, Rescue vs.) emergencyMediator objesine notify etmek için çağırdığı fonksiyon.

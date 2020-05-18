@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import ProductCollection from "./Models/ProductCollection";
-import DiscountObserver from "./Models/DiscountObserver";
 import Caretaker from "./Models/Caretaker";
 import Product from "./Models/Product";
 import Citizen from "./Models/Emergency/Citizen";

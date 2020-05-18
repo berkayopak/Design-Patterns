@@ -16,8 +16,6 @@ class App extends React.Component{
 
     this.onChange = this.onChange.bind(this);
     this.nextProduct = this.nextProduct.bind(this);
-    this.favoriteProduct = this.favoriteProduct.bind(this);
-    this.makeDiscount = this.makeDiscount.bind(this);
     this.saveProduct = this.saveProduct.bind(this);
     this.undoProduct = this.undoProduct.bind(this);
     this.refreshDisplay = this.refreshDisplay.bind(this);

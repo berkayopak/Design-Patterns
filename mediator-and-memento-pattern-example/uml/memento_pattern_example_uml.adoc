@@ -1,0 +1,27 @@
+[plantuml, diagram-classes, png]
+....
+class Product {
+-int _id
+-int _price
+-string _title
+-string _category
+-string _brand
+-int _num_of_purchases
+-Array<Observer> _observers
+
++void attach(Observer observer)
++void notifyAllObservers()
+}
+
+class Caretaker{
+-Array<T> values
+
++int getSize()
++void addObject(Object object)
++Object getObject(int index)
++Object popLatestObject()
+}
+
+Caretaker ..> Product: <<use>>
+
+....

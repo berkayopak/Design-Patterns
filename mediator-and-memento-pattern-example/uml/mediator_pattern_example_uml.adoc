@@ -1,0 +1,67 @@
+[plantuml, diagram-classes, png]     
+....
+abstract Mediator{
+
++{static} void notify(string sender, string event, string message)
+}
+
+class EmergencyMediator{
+-Citizen citizen
+-Fire fire
+-Police police
+-Rescue rescue
+
++void register(Object participant)
++void notify(string sender, string event, string message)
+}
+
+class Citizen {
+-string type
+-EmergencyMediator emergencyMediator
+
++void callEmergencyLine(string event, string message)
+}
+
+class Fire {
+-string type
+-EmergencyMediator emergencyMediator
+
++void callEmergencyLine(string event, string message)
++void sendBackup(message="")
++void sendFireTruck(message="")
+}
+
+class Police {
+-string type
+-EmergencyMediator emergencyMediator
+
++void callEmergencyLine(string event, string message)
++void sendBackup(message="")
++void sendOfficer(message="")
++void sendInvestigator(message="")
+}
+
+class Rescue {
+-string type
+-EmergencyMediator emergencyMediator
+
++void callEmergencyLine(string event, string message)
++void sendBackup(message="")
++void sendAmbulance(message="")
+}
+
+Mediator <|.. EmergencyMediator
+
+
+EmergencyMediator ..> Rescue: <<action>>
+Rescue ..> EmergencyMediator: <<notify>>
+
+EmergencyMediator ..> Fire: <<action>>
+Fire ..> EmergencyMediator: <<notify>>
+
+EmergencyMediator ..> Police: <<action>>
+Police ..> EmergencyMediator: <<notify>>
+
+
+Citizen ..> EmergencyMediator: <<notify>>
+....

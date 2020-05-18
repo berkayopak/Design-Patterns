@@ -1,0 +1,13 @@
+
+
+# Açıklamalar
+
+## Çalıştırma
+[source,console]
+----
+npm install
+yarn start
+----
+** Projeyi çalıştırmak için proje klasörü içerisinde yukarıdaki kodları console/terminal üzerinde çalıştırmanız gerekmektedir. 
+
+CAUTION: Bilgisayarınızda npm ve yarn paketlerinin yüklü olduğundan emin olun.

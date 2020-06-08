@@ -1,0 +1,65 @@
+[plantuml, diagram-classes, png]
+....
+abstract class ICar{
+
+    +void startEngine()
+}
+
+class TransportationDevice{
+    -<<get/set>>string name
+    -<<get/set>>double speed
+}
+
+class DevicesWithEngines{
+    -<<get/set>>Engine engine
+
+    +void startEngine()
+}
+
+class DevicesWithoutEngines{
+
+    +void startMoving()
+}
+
+class Car{
+
+    +void startEngine()
+}
+
+class Bicycle{
+
+    +void startMoving()
+}
+
+class CarDecorator{
+    -Car decoratedCar
+
+    +void startEngine()
+}
+
+class ElectricCarDecorator{
+
+    +void startEngine()
+}
+
+class PetrolCarDecorator{
+
+    +void startEngine()
+}
+
+ICar <|.. Car
+ICar <|.. CarDecorator
+ICar <|.. ElectricCarDecorator
+ICar <|.. PetrolCarDecorator
+
+
+TransportationDevice <|-- DevicesWithEngines
+TransportationDevice <|-- DevicesWithoutEngines
+
+DevicesWithEngines <|-- Car
+DevicesWithoutEngines <|-- Bicycle
+
+CarDecorator <|-- ElectricCarDecorator
+CarDecorator <|-- PetrolCarDecorator
+
+....

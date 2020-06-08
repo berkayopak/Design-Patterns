@@ -140,6 +140,25 @@ class DevicesWithoutEngines extends TransportationDevice {
 
 ## Decorator Pattern
 
+### Artılar ve eksiler
+
+[IMPORTANT]
+.Artılar
+====
+* Yeni bir alt sınıf yapmadan bir nesnenin davranışını genişletebilirsiniz.
+* Çalışma zamanında bir nesneye sorumluluk ekleyebilir veya bu nesneden sorumlulukları kaldırabilirsiniz.
+* Bir nesneyi birden fazla dekoratöre sararak çeşitli davranışları birleştirebilirsiniz.
+* _Single Responsibility Principle_. Olası davranış çeşitlerini uygulayan monolitik bir sınıfı birkaç küçük sınıfa bölebilirsiniz.
+====
+
+[IMPORTANT]
+.Eksiler
+====
+* Sarmalayıcı(wrapper) yığınından belirli bir sarmalayıcıyı çıkarmak zordur.
+* Bir dekoratörü, davranışı dekoratörler yığınındaki sıraya(stack) bağlı olmayacak şekilde uygulamak zordur.
+* Katmanların ilk yapılandırma kodu oldukça çirkin görünebilir.
+====
+
 ##### './src/Models/CarDecorator.js'
 
 [source,javascript]
